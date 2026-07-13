@@ -12,7 +12,7 @@ from openpyxl.utils.cell import coordinate_to_tuple
 # =========================
 
 excel_folder = Path(
-    r"c:\c_wk\10_会社\PDF-相关\Test2"
+    r"c:\c_wk\10_会社\PDF-相关\Test"
 )
 
 
@@ -20,7 +20,7 @@ excel_folder = Path(
 # 印章图片
 # =========================
 
-stamp_file = r"c:\c_wk\10_会社\PDF-相关\Test2\電子印鑑.png"
+stamp_file = r"c:\c_wk\10_会社\PDF-相关\Test\電子印.png"
 
 
 # =========================
@@ -28,9 +28,8 @@ stamp_file = r"c:\c_wk\10_会社\PDF-相关\Test2\電子印鑑.png"
 # =========================
 
 sheet_list = [
-    "Sheet1",
-    "Sheet2",
-    "Sheet3"
+    "発送案内 (シFサ)"
+
 ]
 
 
@@ -38,16 +37,16 @@ sheet_list = [
 # 位置
 # =========================
 
-cell_position = "C10"
+cell_position = "I9"
 
 
 # 图片大小
-stamp_width = 60
-stamp_height = 60
+stamp_width = 40
+stamp_height = 40
 
 
 # 右移动像素
-right_pixel = 400
+right_pixel = 100
 
 # 下移动像素
 down_pixel = 0

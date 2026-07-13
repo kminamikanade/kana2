@@ -18,7 +18,7 @@ $count = 0
 
 foreach ($path in $SourcePaths) {
 
-    Get-ChildItem $path -File |
+    Get-ChildItem $path -File -Recurse |
     Where-Object { $_.Extension -in ".xls", ".xlsx" } |
     ForEach-Object {
 
@@ -26,9 +26,25 @@ foreach ($path in $SourcePaths) {
 
             if ($_.Name -like "*$num*") {
 
-                Write-Host "COPY => $($_.Name)"
+                $name = $_.BaseName
 
-                Copy-Item $_.FullName $TargetPath -Force
+                $parts = $name -split ' '
+
+                if ($parts.Count -ge 4) {
+                    $newBaseName = ($parts[0..2] -join ' ')
+                }
+                else {
+                    $newBaseName = $name
+                }
+
+                $newName = $newBaseName + $_.Extension
+
+                Write-Host "COPY => $newName"
+
+                Copy-Item `
+                    -Path $_.FullName `
+                    -Destination (Join-Path $TargetPath $newName) `
+                    -Force
 
                 $count++
 
