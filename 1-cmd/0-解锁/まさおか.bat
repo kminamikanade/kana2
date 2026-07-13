@@ -3,7 +3,7 @@
 chcp 65001 >nul
 
 rem ====== 在这里修改您的 PDF 文件夹绝对路径 ======
-set "targetFolder=C:\Users\qinza\Downloads"
+set "targetFolder="
 rem ================================================
 
 echo 正在解除文件夹的锁定：%targetFolder%
