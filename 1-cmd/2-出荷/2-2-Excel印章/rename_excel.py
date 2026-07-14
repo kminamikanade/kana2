@@ -12,136 +12,83 @@ from openpyxl.utils.cell import coordinate_to_tuple
 # =========================
 
 excel_folder = Path(
-    r"c:\c_wk\10_会社\PDF-相关\Test"
+    r""
 )
 
 
-# =========================
-# 印章图片
-# =========================
-
-stamp_file = r"c:\c_wk\10_会社\PDF-相关\Test\電子印.png"
+stamp_file = r""
 
 
-# =========================
-# Sheet
-# =========================
+sheet_settings = {
+    "": {"cell": "I9", "right": 100, "down": -5, "size": 55},     
+    "": {"cell": "I9", "right": 100, "down": -25, "size": 55},   
+    "": {"cell": "I9", "right": 100, "down": -25, "size": 55}  
+}
 
-sheet_list = [
-    "発送案内 (シFサ)"
-
-]
+# 默认设置（如果某个 sheet 没在上面设置，就用这个）
+default_setting = {"cell": "I9", "right": 100, "down": -5, "size": 55}
 
 
 # =========================
-# 位置
+# 主程序
 # =========================
-
-cell_position = "I9"
-
-
-# 图片大小
-stamp_width = 40
-stamp_height = 40
-
-
-# 右移动像素
-right_pixel = 100
-
-# 下移动像素
-down_pixel = 0
-
-
 
 success = 0
 
-
-
 for excel_file in excel_folder.glob("*.xlsx"):
-
 
     # 跳过临时文件
     if excel_file.name.startswith("~$"):
         continue
 
-
     # 跳过设置Excel
     if excel_file.name == "rename_list.xlsx":
         continue
 
-
     print("处理:", excel_file.name)
-
 
     try:
 
         wb = openpyxl.load_workbook(excel_file)
 
-
-        for sheet_name in sheet_list:
-
-
-            if sheet_name in wb.sheetnames:
-
-
-                ws = wb[sheet_name]
-
-
-                img = Image(stamp_file)
-
-
-                img.width = stamp_width
-                img.height = stamp_height
-
-
-                row, col = coordinate_to_tuple(
-                    cell_position
-                )
-
-
-                marker = AnchorMarker(
-
-                    col=col - 1,
-
-                    row=row - 1,
-
-                    colOff=right_pixel * 9525,
-
-                    rowOff=down_pixel * 9525
-
-                )
-
-
-                size = XDRPositiveSize2D(
-
-                    cx=stamp_width * 9525,
-
-                    cy=stamp_height * 9525
-
-                )
-
-
-                anchor = OneCellAnchor(
-
-                    _from=marker,
-
-                    ext=size
-
-                )
-
-
-                img.anchor = anchor
-
-
-                ws.add_image(img)
-
-
+        # 遍历工作簿里的所有 sheet
+        for ws in wb.worksheets:
+            sheet_name = ws.title
+            
+            # 获取这个 sheet 的设置
+            if sheet_name in sheet_settings:
+                setting = sheet_settings[sheet_name]
+            else:
+                setting = default_setting
+            
+            print(f"  → {sheet_name}: 位置={setting['cell']}, 上移={setting['down']}")
+            
+            img = Image(stamp_file)
+            img.width = setting["size"]
+            img.height = setting["size"]
+            
+            row, col = coordinate_to_tuple(setting["cell"])
+            
+            marker = AnchorMarker(
+                col=col - 1,
+                row=row - 1,
+                colOff=setting["right"] * 9525,
+                rowOff=setting["down"] * 9525  # 负数就是往上移
+            )
+            
+            size = XDRPositiveSize2D(
+                cx=setting["size"] * 9525,
+                cy=setting["size"] * 9525
+            )
+            
+            anchor = OneCellAnchor(_from=marker, ext=size)
+            img.anchor = anchor
+            
+            ws.add_image(img)
 
         wb.save(excel_file)
 
-
         success += 1
-
 
     except Exception as e:
 
@@ -150,8 +97,6 @@ for excel_file in excel_folder.glob("*.xlsx"):
             excel_file.name,
             e
         )
-
-
 
 print()
 print("================")
