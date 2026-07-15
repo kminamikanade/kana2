@@ -7,7 +7,7 @@ import openpyxl
 # =========================
 
 input_folder = Path(
-    r"C:\c_wk\10_会社\PDF-相关\Test2"
+    r"C:\c_wk\10_会社\PDF-相关\Test"
 )
 
 
@@ -28,7 +28,7 @@ for excel_file in input_folder.glob("*.xlsx"):
 
 
         # 两个Sheet
-        for sheet_name in ["Sheet1", "Sheet2"]:
+        for sheet_name in ["22", "33"]:
 
 
             if sheet_name in wb.sheetnames:
@@ -37,8 +37,8 @@ for excel_file in input_folder.glob("*.xlsx"):
 
 
                 # 设置50、51行高度
-                ws.row_dimensions[10].height = 50
-                ws.row_dimensions[11].height = 50
+                ws.row_dimensions[40 41].height = 18
+                ws.row_dimensions[42 43].height = 18
 
 
 
