@@ -6,3 +6,4 @@ pip install openpyxl
 
 pip install pywin32
 
+Material Icon Theme
